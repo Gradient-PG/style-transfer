@@ -1,0 +1,10 @@
+# As this directory is important to exist bu the data inside is probably not supposed to be viewed 
+
+# Ignore all directories
+*/
+
+# Ignore all files
+*
+
+# Exept for .gitignore
+!.gitignore
