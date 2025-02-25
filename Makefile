@@ -45,7 +45,7 @@ test-text:
 	$(python) models/dreamstyler/inference_t2i.py \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
-  --prompt "A painting of a lighthight next to cliff in the style of {}" \
+  --prompt "Painting of $(PROMPT), in the style of {}" \
   --saveroot "./outputs/$(TOKEN)" \
   --placeholder_token "<$(TOKEN)>"
 
@@ -56,7 +56,7 @@ test-style:
   --content_image_path "./data/test/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
   --placeholder_token "<$(TOKEN)>" \
-  --prompt "Painting of a beautiful human face, in a style of {}"
+  --prompt "Painting of $(PROMPT), in a style of {}"
 
 run:
 	$(python) main.py
