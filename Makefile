@@ -56,7 +56,7 @@ test-style:
   --content_image_path "./data/test/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
   --placeholder_token "<$(TOKEN)>" \
-  --prompt "Painting of $(PROMPT), in a style of {}"
+  --prompt "Painting of $(PROMPT), in the style of {}"
 
 run:
 	$(python) main.py
