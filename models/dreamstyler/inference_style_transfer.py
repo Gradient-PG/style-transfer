@@ -104,7 +104,7 @@ def style_transfer(
 			control_image=control_image,
 			cross_attention_kwargs=cross_attention_kwargs,
 			strength=0.8,
-			guidance_scale=7.5
+			guidance_scale=10
 		).images[0]
 		outputs.append(output)
 	
