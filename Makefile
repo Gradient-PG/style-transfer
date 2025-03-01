@@ -59,11 +59,5 @@ test-style:
   --prompt "Painting of $(PROMPT), in the style of {}" \
   --controlnet_path "lllyasviel/control_v11p_sd15_canny"
 
-run:
-	$(python) main.py
-
-test:
-	$(python) -m pytest
-
 remove:
 	$(RM) venv
