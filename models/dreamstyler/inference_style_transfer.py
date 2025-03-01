@@ -42,7 +42,8 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 	)
 	pipeline.scheduler = UniPCMultistepScheduler.from_config(pipeline.scheduler.config)
 	pipeline.enable_model_cpu_offload()
-	processor_midas = Processor("depth_midas")
+	
+	processor_midas = Processor("canny")
 	
 	return pipeline, processor_midas
 
@@ -80,7 +81,11 @@ def style_transfer(
 		placeholder_token,
 		num_stages,
 	)
-	generator = None if seed is None else torch.Generator(device="cuda").manual_seed(seed)
+	
+	device = "cuda:0" if torch.cuda.is_available() else "cpu"
+	
+	pipeline.to(device)
+	generator = None if seed is None else torch.Generator(device=device).manual_seed(seed)
 	cross_attention_kwargs = {"num_stages": num_stages}
 	
 	content_image = Image.open(content_image_path)
@@ -89,7 +94,7 @@ def style_transfer(
 	pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 	
 	outputs = []
-	# torch.manual_seed(1)    
+	# torch.manual_seed(1)
 	for _ in range(num_samples):
 		output = pipeline(
 			prompt=pos_prompt,
@@ -98,8 +103,8 @@ def style_transfer(
 			image=content_image,
 			control_image=control_image,
 			cross_attention_kwargs=cross_attention_kwargs,
-			# strength=0.8,             
-			# guidance_scale=7.5      
+			strength=0.8,
+			guidance_scale=7.5
 		).images[0]
 		outputs.append(output)
 	

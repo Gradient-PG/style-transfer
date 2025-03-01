@@ -56,7 +56,8 @@ test-style:
   --content_image_path "./data/test/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
   --placeholder_token "<$(TOKEN)>" \
-  --prompt "Painting of $(PROMPT), in the style of {}"
+  --prompt "Painting of $(PROMPT), in the style of {}" \
+  --controlnet_path "lllyasviel/control_v11p_sd15_canny"
 
 run:
 	$(python) main.py
