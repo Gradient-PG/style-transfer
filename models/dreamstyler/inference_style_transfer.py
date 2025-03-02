@@ -14,11 +14,16 @@ from transformers import CLIPTextModel, CLIPTokenizer
 from controlnet_aux.processor import Processor
 import custom_pipelines
 
+import yaml
 
-def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks1>", num_stages=6):
+
+def load_model(sd_path, controlnet_paths, controlnet_names, embedding_path, placeholder_token="<sks1>", num_stages=6):
 	tokenizer = CLIPTokenizer.from_pretrained(sd_path, subfolder="tokenizer")
 	text_encoder = CLIPTextModel.from_pretrained(sd_path, subfolder="text_encoder")
-	controlnet = ControlNetModel.from_pretrained(controlnet_path, torch_dtype=torch.float16)
+	controlnets = [
+		ControlNetModel.from_pretrained(path, torch_dtype=torch.float16)
+		for path in controlnet_paths
+	]
 	
 	placeholder_token = [f"{placeholder_token}-T{t}" for t in range(num_stages)]
 	num_added_tokens = tokenizer.add_tokens(placeholder_token)
@@ -34,7 +39,7 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 	
 	pipeline = StableDiffusionControlNetPipeline.from_pretrained(
 		sd_path,
-		controlnet=controlnet,
+		controlnet=controlnets,
 		text_encoder=text_encoder.to(torch.float16),
 		tokenizer=tokenizer,
 		torch_dtype=torch.float16,
@@ -52,9 +57,12 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 	pipeline.scheduler = UniPCMultistepScheduler.from_config(pipeline.scheduler.config)
 	# pipeline.enable_model_cpu_offload()
 	
-	processor_midas = Processor("normal_bae")
+	processors = [
+		Processor(name)
+		for name in controlnet_names
+	]
 	
-	return pipeline, processor_midas
+	return pipeline, processors
 
 
 @click.command()
@@ -69,6 +77,7 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 @click.option("--num_samples", default=5)
 @click.option("--resolution", default=512)
 @click.option("--seed")
+@click.option("--config_path", default="config.yml")
 def style_transfer(
 		sd_path=None,
 		controlnet_path="lllyasviel/control_v11f1p_sd15_depth",
@@ -81,11 +90,25 @@ def style_transfer(
 		num_samples=5,
 		resolution=512,
 		seed=None,
+		config_path="config.yml",
 ):
+	
+	with open(config_path, 'r') as file:
+		config = yaml.safe_load(file)
+	
+	controlnet_paths = []
+	
+	controlnet_names = config.get("style-transfer", {}).get("controlnet", {}).get("name", "depth_midas")
+	if isinstance(controlnet_names, str):
+		controlnet_names = [controlnet_names]
+	for name in controlnet_names:
+		controlnet_paths.append(config.get("controlnet_paths", {}).get(name, controlnet_path))
+	
 	os.makedirs(saveroot, exist_ok=True)
-	pipeline, processor = load_model(
+	pipeline, processors = load_model(
 		sd_path,
-		controlnet_path,
+		controlnet_paths,
+		controlnet_names,
 		embedding_path,
 		placeholder_token,
 		num_stages,
@@ -99,7 +122,7 @@ def style_transfer(
 	
 	content_image = Image.open(content_image_path)
 	content_image = content_image.resize((resolution, resolution))
-	control_image = processor(content_image, to_pil=True)
+	control_image = [processor(content_image, to_pil=True) for processor in processors]
 	pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 	
 	negative_prompt = "blurry, bad quality, low resolution, deformed, ugly"
@@ -114,6 +137,7 @@ def style_transfer(
 			num_inference_steps=30,
 			generator=generator,
 			image=control_image,
+			# controlnet_conditioning_scale=[0.5, 0.5],
 			# image=content_image,
 			# control_image=control_image,
 			# cross_attention_kwargs=cross_attention_kwargs,

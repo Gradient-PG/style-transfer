@@ -1,1 +1,11 @@
 # Probably will be usefully for Models in the future
+
+controlnet_paths:
+  normal_bae: "lllyasviel/control_v11p_sd15_normalbae"
+  canny: "lllyasviel/control_v11p_sd15_canny"
+  softedge_hed: "lllyasviel/control_v11p_sd15_softedge"
+  depth_midas: "lllyasviel/control_v11f1p_sd15_depth"
+
+style-transfer:
+  controlnet:
+    name: ["softedge_hed"]

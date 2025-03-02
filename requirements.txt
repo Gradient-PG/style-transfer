@@ -5,6 +5,11 @@ diffusers==0.20.0
 transformers==4.36.0
 accelerate==0.20.3
 huggingface_hub<0.26.0
-click
-imageio
+click~=8.1.8
+imageio~=2.37.0
 controlnet_aux
+
+numpy~=2.2.3
+pillow~=11.1.0
+tqdm~=4.67.1
+PyYAML~=6.0.2
