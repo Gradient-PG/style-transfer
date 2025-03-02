@@ -57,7 +57,7 @@ test-style:
   --saveroot "./outputs/$(TOKEN)" \
   --placeholder_token "<$(TOKEN)>" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
-  --controlnet_path "lllyasviel/control_v11p_sd15_canny"
+  --controlnet_path "lllyasviel/control_v11p_sd15_normalbae"
 
 remove:
 	$(RM) venv

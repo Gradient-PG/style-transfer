@@ -9,7 +9,7 @@ import torch
 import imageio
 import numpy as np
 from PIL import Image
-from diffusers import ControlNetModel, UniPCMultistepScheduler
+from diffusers import ControlNetModel, UniPCMultistepScheduler, StableDiffusionControlNetPipeline
 from transformers import CLIPTextModel, CLIPTokenizer
 from controlnet_aux.processor import Processor
 import custom_pipelines
@@ -32,6 +32,15 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 	for token, token_id in zip(placeholder_token, placeholder_token_id):
 		token_embeds[token_id] = learned_embeds[token]
 	
+	# pipeline = StableDiffusionControlNetPipeline.from_pretrained(
+	# 	sd_path,
+	# 	controlnet=controlnet,
+	# 	text_encoder=text_encoder.to(torch.float16),
+	# 	tokenizer=tokenizer,
+	# 	torch_dtype=torch.float16,
+	# 	safety_checker=None,
+	# )
+	
 	pipeline = custom_pipelines.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
 		sd_path,
 		controlnet=controlnet,
@@ -43,7 +52,7 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 	pipeline.scheduler = UniPCMultistepScheduler.from_config(pipeline.scheduler.config)
 	pipeline.enable_model_cpu_offload()
 	
-	processor_midas = Processor("canny")
+	processor_midas = Processor("normal_bae")
 	
 	return pipeline, processor_midas
 
@@ -94,7 +103,7 @@ def style_transfer(
 	pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 	
 	outputs = []
-	# torch.manual_seed(1)
+	torch.manual_seed(1)
 	for _ in range(num_samples):
 		output = pipeline(
 			prompt=pos_prompt,
@@ -103,8 +112,8 @@ def style_transfer(
 			image=content_image,
 			control_image=control_image,
 			cross_attention_kwargs=cross_attention_kwargs,
-			strength=0.8,
-			guidance_scale=10
+			# strength=0.2,
+			# guidance_scale=10
 		).images[0]
 		outputs.append(output)
 	
