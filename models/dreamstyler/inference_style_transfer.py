@@ -32,16 +32,7 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 	for token, token_id in zip(placeholder_token, placeholder_token_id):
 		token_embeds[token_id] = learned_embeds[token]
 	
-	# pipeline = StableDiffusionControlNetPipeline.from_pretrained(
-	# 	sd_path,
-	# 	controlnet=controlnet,
-	# 	text_encoder=text_encoder.to(torch.float16),
-	# 	tokenizer=tokenizer,
-	# 	torch_dtype=torch.float16,
-	# 	safety_checker=None,
-	# )
-	
-	pipeline = custom_pipelines.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
+	pipeline = StableDiffusionControlNetPipeline.from_pretrained(
 		sd_path,
 		controlnet=controlnet,
 		text_encoder=text_encoder.to(torch.float16),
@@ -49,8 +40,17 @@ def load_model(sd_path, controlnet_path, embedding_path, placeholder_token="<sks
 		torch_dtype=torch.float16,
 		safety_checker=None,
 	)
+	
+	# pipeline = custom_pipelines.StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
+	# 	sd_path,
+	# 	controlnet=controlnet,
+	# 	text_encoder=text_encoder.to(torch.float16),
+	# 	tokenizer=tokenizer,
+	# 	torch_dtype=torch.float16,
+	# 	safety_checker=None,
+	# )
 	pipeline.scheduler = UniPCMultistepScheduler.from_config(pipeline.scheduler.config)
-	pipeline.enable_model_cpu_offload()
+	# pipeline.enable_model_cpu_offload()
 	
 	processor_midas = Processor("normal_bae")
 	
@@ -102,16 +102,21 @@ def style_transfer(
 	control_image = processor(content_image, to_pil=True)
 	pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 	
+	negative_prompt = "blurry, bad quality, low resolution, deformed, ugly"
+	negative_prompt = [negative_prompt for _ in range(num_stages)]
+	
 	outputs = []
 	torch.manual_seed(1)
 	for _ in range(num_samples):
 		output = pipeline(
 			prompt=pos_prompt,
+			negative_prompt=negative_prompt,
 			num_inference_steps=30,
 			generator=generator,
-			image=content_image,
-			control_image=control_image,
-			cross_attention_kwargs=cross_attention_kwargs,
+			image=control_image,
+			# image=content_image,
+			# control_image=control_image,
+			# cross_attention_kwargs=cross_attention_kwargs,
 			# strength=0.2,
 			# guidance_scale=10
 		).images[0]
