@@ -4,7 +4,7 @@ _Diffusion_
 
 ## Useful commands
 
-### Training new style form an image
+### Training new style from an image
 
 ```bash
 make train TOKEN="tstN" PROMPT="a lonely tree in the field during sunset"
