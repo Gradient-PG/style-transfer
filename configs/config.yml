@@ -9,3 +9,4 @@ controlnet_paths:
 style-transfer:
   controlnet:
     name: ["softedge_hed"]
+    weights: [0.4]

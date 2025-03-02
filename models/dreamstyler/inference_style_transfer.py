@@ -37,7 +37,7 @@ def load_model(sd_path, controlnet_paths, controlnet_names, embedding_path, plac
 	for token, token_id in zip(placeholder_token, placeholder_token_id):
 		token_embeds[token_id] = learned_embeds[token]
 	
-	pipeline = StableDiffusionControlNetPipeline.from_pretrained(
+	pipeline = custom_pipelines.StableDiffusionControlNetPipeline.from_pretrained(
 		sd_path,
 		controlnet=controlnets,
 		text_encoder=text_encoder.to(torch.float16),
@@ -103,6 +103,7 @@ def style_transfer(
 		controlnet_names = [controlnet_names]
 	for name in controlnet_names:
 		controlnet_paths.append(config.get("controlnet_paths", {}).get(name, controlnet_path))
+	weights = config.get("style-transfer", {}).get("controlnet", {}).get("weights", [0.7])
 	
 	os.makedirs(saveroot, exist_ok=True)
 	pipeline, processors = load_model(
@@ -114,7 +115,7 @@ def style_transfer(
 		num_stages,
 	)
 	
-	device = "cuda:0" if torch.cuda.is_available() else "cpu"
+	device = "cuda:1" if torch.cuda.is_available() else "cpu"
 	
 	pipeline.to(device)
 	generator = None if seed is None else torch.Generator(device=device).manual_seed(seed)
@@ -126,7 +127,6 @@ def style_transfer(
 	pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 	
 	negative_prompt = "blurry, bad quality, low resolution, deformed, ugly"
-	negative_prompt = [negative_prompt for _ in range(num_stages)]
 	
 	outputs = []
 	torch.manual_seed(1)
@@ -137,10 +137,10 @@ def style_transfer(
 			num_inference_steps=30,
 			generator=generator,
 			image=control_image,
-			# controlnet_conditioning_scale=[0.5, 0.5],
+			controlnet_conditioning_scale=weights,
 			# image=content_image,
 			# control_image=control_image,
-			# cross_attention_kwargs=cross_attention_kwargs,
+			cross_attention_kwargs=cross_attention_kwargs,
 			# strength=0.2,
 			# guidance_scale=10
 		).images[0]
