@@ -7,11 +7,11 @@ controlnet_paths:
   depth_midas: "lllyasviel/control_v11f1p_sd15_depth"
 
 style-tokens:
-  tst1:
+  tst2:
     controlnet:
-      name: [ "softedge_hed" ]
-      weights: [ 0.4 ]
+      name: [ "depth_midas", "canny" ]
+      weights: [ 0.2, 0.4 ]
   tst5:
     controlnet:
-      name: [ "softedge_hed" ]
-      weights: [ 0.4 ]
+      name: [ "canny", "normal_bae" ]
+      weights: [ 0.9, 0.2 ]
