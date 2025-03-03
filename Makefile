@@ -23,7 +23,7 @@ setup:
 	$(pip) install -r requirements.txt
 
 train:
-	$(python) models/dreamstyler/train.py \
+	$(python) src/models/dreamstyler/train.py \
   --num_stages 6 \
   --train_image_path "./data/train/$(TOKEN).jpg" \
   --context_prompt "A painting of $(PROMPT) in the style of {}" \
@@ -42,7 +42,7 @@ train:
   --lr_warmup_steps 0
 
 test-text:
-	$(python) models/dreamstyler/inference_t2i.py \
+	$(python) src/models/dreamstyler/inference_t2i.py \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
@@ -50,14 +50,25 @@ test-text:
   --placeholder_token "<$(TOKEN)>"
 
 test-style:
-	$(python) models/dreamstyler/inference_style_transfer.py \
+	$(python) src/models/dreamstyler/inference_style_transfer.py \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
   --content_image_path "./data/test/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
   --token "$(TOKEN)" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
-  --config_path "configs/config.yml"
+  --config_path "./configs/config.yml"
+
+test-stgrid:
+	$(python) src/style_transfer_test_grid.py \
+  --sd_path "runwayml/stable-diffusion-v1-5" \
+  --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
+  --content_dir "./data/test" \
+  --saveroot "./outputs" \
+  --token "$(TOKEN)" \
+  --prompt "Painting of $(PROMPT), in the style of {}" \
+  --config_path "./configs/config.yml" \
+  --num_samples 3
 
 remove:
 	$(RM) venv

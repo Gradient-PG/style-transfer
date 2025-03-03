@@ -9,10 +9,10 @@ import torch
 import imageio
 import numpy as np
 from PIL import Image
-from diffusers import ControlNetModel, UniPCMultistepScheduler, StableDiffusionControlNetPipeline
+from diffusers import ControlNetModel, UniPCMultistepScheduler
 from transformers import CLIPTextModel, CLIPTokenizer
 from controlnet_aux.processor import Processor
-import custom_pipelines
+from .custom_pipelines import StableDiffusionControlNetPipeline
 
 import yaml
 
@@ -37,7 +37,7 @@ def load_model(sd_path, controlnet_paths, controlnet_names, embedding_path, plac
 	for token, token_id in zip(placeholder_token, placeholder_token_id):
 		token_embeds[token_id] = learned_embeds[token]
 	
-	pipeline = custom_pipelines.StableDiffusionControlNetPipeline.from_pretrained(
+	pipeline = StableDiffusionControlNetPipeline.from_pretrained(
 		sd_path,
 		controlnet=controlnets,
 		text_encoder=text_encoder.to(torch.float16),
@@ -65,34 +65,24 @@ def load_model(sd_path, controlnet_paths, controlnet_names, embedding_path, plac
 	return pipeline, processors
 
 
-@click.command()
-@click.option("--sd_path")
-@click.option("--controlnet_path", default="lllyasviel/control_v11f1p_sd15_depth")
-@click.option("--embedding_path")
-@click.option("--content_image_path")
-@click.option("--saveroot", default="./outputs")
-@click.option("--prompt", default="A painting of a city skyline, in the style of {}")
-@click.option("--token", default="sks1")
-@click.option("--num_stages", default=6)
-@click.option("--num_samples", default=5)
-@click.option("--resolution", default=512)
-@click.option("--seed")
-@click.option("--config_path", default="config.yml")
 def style_transfer(
 		sd_path=None,
 		controlnet_path="lllyasviel/control_v11f1p_sd15_depth",
 		embedding_path=None,
-		content_image_path=None,
+		content_image_paths=None,
 		saveroot="./outputs",
 		prompt="A painting of a city skyline, in the style of {}",
 		token="sks1",
 		num_stages=6,
 		num_samples=5,
 		resolution=512,
-		seed=None,
 		config_path="config.yml",
+		returns=False,
+		seed=None,
 ):
 	placeholder_token = f"<{token}>"
+	if isinstance(content_image_paths, str):
+		content_image_paths = [content_image_paths]
 	
 	with open(config_path, 'r') as file:
 		config = yaml.safe_load(file)
@@ -124,34 +114,86 @@ def style_transfer(
 	generator = None if seed is None else torch.Generator(device=device).manual_seed(seed)
 	cross_attention_kwargs = {"num_stages": num_stages}
 	
-	content_image = Image.open(content_image_path)
-	content_image = content_image.resize((resolution, resolution))
-	control_image = [processor(content_image, to_pil=True) for processor in processors]
-	pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
+	content_outputs = []
+	for image_path in content_image_paths:
+		content_image = Image.open(image_path)
+		content_image = content_image.resize((resolution, resolution))
+		control_image = [processor(content_image, to_pil=True) for processor in processors]
+		pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
+		
+		negative_prompt = "blurry, bad quality, low resolution, deformed, strabismus, ugly, poorly drawn, worst quality, low quality, normal quality"
+		
+		outputs = []
+		torch.manual_seed(1)
+		for _ in range(num_samples):
+			output = pipeline(
+				prompt=pos_prompt,
+				negative_prompt=negative_prompt,
+				num_inference_steps=30,
+				generator=generator,
+				image=control_image,
+				controlnet_conditioning_scale=weights,
+				# image=content_image,
+				# control_image=control_image,
+				cross_attention_kwargs=cross_attention_kwargs,
+				# strength=0.2,
+				# guidance_scale=10
+			).images[0]
+			outputs.append(output)
+		content_outputs.append(outputs)
 	
-	negative_prompt = "blurry, bad quality, low resolution, deformed, ugly"
+	if returns:
+		return content_outputs
 	
-	outputs = []
-	torch.manual_seed(1)
-	for _ in range(num_samples):
-		output = pipeline(
-			prompt=pos_prompt,
-			negative_prompt=negative_prompt,
-			num_inference_steps=30,
-			generator=generator,
-			image=control_image,
-			controlnet_conditioning_scale=weights,
-			# image=content_image,
-			# control_image=control_image,
-			cross_attention_kwargs=cross_attention_kwargs,
-			# strength=0.2,
-			# guidance_scale=10
-		).images[0]
-		outputs.append(output)
-	
-	outputs = np.concatenate([np.asarray(img) for img in outputs], axis=1)
-	save_path = ospj(saveroot, f"{content_image_path.split('/')[-1].split('.')[0]}.png")
+	outputs = np.concatenate([np.asarray(img) for img in content_outputs[0]], axis=1)
+	save_path = ospj(saveroot, f"{content_image_paths[0].split('/')[-1].split('.')[0]}.png")
 	imageio.imsave(save_path, outputs)
+
+
+@click.command()
+@click.option("--sd_path")
+@click.option("--controlnet_path", default="lllyasviel/control_v11f1p_sd15_depth")
+@click.option("--embedding_path")
+@click.option("--content_image_path")
+@click.option("--saveroot", default="./outputs")
+@click.option("--prompt", default="A painting of a city skyline, in the style of {}")
+@click.option("--token", default="sks1")
+@click.option("--num_stages", default=6)
+@click.option("--num_samples", default=5)
+@click.option("--resolution", default=512)
+@click.option("--seed")
+@click.option("--config_path", default="config.yml")
+@click.option("--returns", default=False)
+def style_transfer_cli(
+		sd_path,
+		controlnet_path,
+		embedding_path,
+		content_image_path,
+		saveroot,
+		prompt,
+		token,
+		num_stages,
+		num_samples,
+		resolution,
+		seed,
+		config_path,
+		returns
+):
+	return style_transfer(
+		sd_path,
+		controlnet_path,
+		embedding_path,
+		content_image_path,
+		saveroot,
+		prompt,
+		token,
+		num_stages,
+		num_samples,
+		resolution,
+		config_path,
+		returns,
+		seed
+	)
 
 
 if __name__ == "__main__":
