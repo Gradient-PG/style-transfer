@@ -6,7 +6,12 @@ controlnet_paths:
   softedge_hed: "lllyasviel/control_v11p_sd15_softedge"
   depth_midas: "lllyasviel/control_v11f1p_sd15_depth"
 
-style-transfer:
-  controlnet:
-    name: ["softedge_hed"]
-    weights: [0.4]
+style-tokens:
+  tst1:
+    controlnet:
+      name: [ "softedge_hed" ]
+      weights: [ 0.4 ]
+  tst5:
+    controlnet:
+      name: [ "softedge_hed" ]
+      weights: [ 0.4 ]

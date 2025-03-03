@@ -55,7 +55,7 @@ test-style:
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
   --content_image_path "./data/test/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
-  --placeholder_token "<$(TOKEN)>" \
+  --token "$(TOKEN)" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
   --config_path "configs/config.yml"
 

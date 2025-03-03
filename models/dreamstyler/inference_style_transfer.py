@@ -72,7 +72,7 @@ def load_model(sd_path, controlnet_paths, controlnet_names, embedding_path, plac
 @click.option("--content_image_path")
 @click.option("--saveroot", default="./outputs")
 @click.option("--prompt", default="A painting of a city skyline, in the style of {}")
-@click.option("--placeholder_token", default="<sks1>")
+@click.option("--token", default="sks1")
 @click.option("--num_stages", default=6)
 @click.option("--num_samples", default=5)
 @click.option("--resolution", default=512)
@@ -85,25 +85,28 @@ def style_transfer(
 		content_image_path=None,
 		saveroot="./outputs",
 		prompt="A painting of a city skyline, in the style of {}",
-		placeholder_token="<sks1>",
+		token="sks1",
 		num_stages=6,
 		num_samples=5,
 		resolution=512,
 		seed=None,
 		config_path="config.yml",
 ):
+	placeholder_token = f"<{token}>"
 	
 	with open(config_path, 'r') as file:
 		config = yaml.safe_load(file)
 	
-	controlnet_paths = []
+	controlnet_configs = config.get("style-tokens", {}).get(token, {}).get("controlnet", {})
 	
-	controlnet_names = config.get("style-transfer", {}).get("controlnet", {}).get("name", "depth_midas")
+	controlnet_paths = []
+	controlnet_names = controlnet_configs.get("name", "depth_midas")
 	if isinstance(controlnet_names, str):
 		controlnet_names = [controlnet_names]
+	
 	for name in controlnet_names:
 		controlnet_paths.append(config.get("controlnet_paths", {}).get(name, controlnet_path))
-	weights = config.get("style-transfer", {}).get("controlnet", {}).get("weights", [0.7])
+	weights = controlnet_configs.get("weights", [0.7])
 	
 	os.makedirs(saveroot, exist_ok=True)
 	pipeline, processors = load_model(
