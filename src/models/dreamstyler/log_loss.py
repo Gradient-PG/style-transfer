@@ -38,11 +38,9 @@ def log_metrics(prompt, num_steps=25):  #in t2i the inference_num_steps was 25
 
     return image
 
-
 # CLIP
 clip_model = CLIPModel.from_pretrained("openai/clip-vit-large-patch14").to("cuda")
 clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
-
 
 def compute_clip_score(image, prompt):
     inputs = clip_processor(text=prompt, images=image, return_tensors="pt").to("cuda")
