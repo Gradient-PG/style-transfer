@@ -53,7 +53,7 @@ test-style:
 	$(python) -m src.models.dreamstyler.inference_style_transfer \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
-  --content_image_path "./data/test/$(CONTENT)" \
+  --content_image_path "./data/test/girls/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
   --token "$(TOKEN)" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
@@ -63,7 +63,7 @@ test-stgrid:
 	$(python) -m src.style_transfer_test_grid \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
-  --content_dir "./data/test" \
+  --content_dir "./data/test/girls" \
   --saveroot "./outputs" \
   --token "$(TOKEN)" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
