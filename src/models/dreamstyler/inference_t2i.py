@@ -10,7 +10,7 @@ import numpy as np
 import imageio
 from diffusers import DPMSolverMultistepScheduler
 from transformers import CLIPTextModel, CLIPTokenizer
-import custom_pipelines
+from .custom_pipelines import StableDiffusionPipeline
 
 
 def load_model(sd_path, embedding_path, placeholder_token="<sks1>", num_stages=6):
@@ -29,7 +29,7 @@ def load_model(sd_path, embedding_path, placeholder_token="<sks1>", num_stages=6
 	for token, token_id in zip(placeholder_token, placeholder_token_id):
 		token_embeds[token_id] = learned_embeds[token]
 	
-	pipeline = custom_pipelines.StableDiffusionPipeline.from_pretrained(
+	pipeline = StableDiffusionPipeline.from_pretrained(
 		sd_path,
 		text_encoder=text_encoder,
 		tokenizer=tokenizer,

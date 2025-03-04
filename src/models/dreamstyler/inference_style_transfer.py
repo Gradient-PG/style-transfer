@@ -12,7 +12,7 @@ from PIL import Image
 from diffusers import ControlNetModel, UniPCMultistepScheduler
 from transformers import CLIPTextModel, CLIPTokenizer
 from controlnet_aux.processor import Processor
-from custom_pipelines import StableDiffusionControlNetPipeline
+from .custom_pipelines import StableDiffusionControlNetPipeline
 
 import yaml
 

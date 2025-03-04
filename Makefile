@@ -42,7 +42,7 @@ train:
   --lr_warmup_steps 0
 
 test-text:
-	$(python) src/models/dreamstyler/inference_t2i.py \
+	$(python) -m src.models.dreamstyler.inference_t2i \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
@@ -50,7 +50,7 @@ test-text:
   --placeholder_token "<$(TOKEN)>"
 
 test-style:
-	$(python) src/models/dreamstyler/inference_style_transfer.py \
+	$(python) -m src.models.dreamstyler.inference_style_transfer \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
   --content_image_path "./data/test/$(CONTENT)" \
@@ -60,7 +60,7 @@ test-style:
   --config_path "./configs/config.yml"
 
 test-stgrid:
-	$(python) src/style_transfer_test_grid.py \
+	$(python) -m src.style_transfer_test_grid \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
   --content_dir "./data/test" \

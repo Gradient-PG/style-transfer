@@ -1,12 +1,11 @@
 import os
-import sys
 from os.path import join
 import click
 from PIL import Image
 import imageio
 import numpy as np
 
-from models.dreamstyler.inference_style_transfer import style_transfer
+from .models.dreamstyler.inference_style_transfer import style_transfer
 
 
 @click.command()
