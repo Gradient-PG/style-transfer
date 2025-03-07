@@ -13,7 +13,7 @@ else
     pip = venv/bin/pip
 endif
 
-PROMPT ?= "a scenery"
+PROMPT ?= "please provide a description"
 TOKEN ?= "tst0"
 CONTENT ?= "test00.jpg"
 
@@ -25,9 +25,10 @@ setup:
 train:
 	$(python) src/models/dreamstyler/train.py \
   --num_stages 6 \
+  --dataset_config "./configs/train.yml" \
   --train_image_path "./data/train/$(TOKEN).jpg" \
   --context_prompt "A painting of $(PROMPT) in the style of {}" \
-  --placeholder_token "<$(TOKEN)>" \
+  --placeholder_token "$(TOKEN)" \
   --output_dir "./steps/$(TOKEN)" \
   --learnable_property style \
   --initializer_token painting \

@@ -1,0 +1,10 @@
+
+# prompt: "A painting of _, in the style of {}"
+
+datasets:
+  tst7:
+    - path: "0.jpg"
+      prompt: "A painting of a bridge over a rocky river stretching across small field with trees, with a forest and a small country house in the background, in the style of {}"
+    - path: "1.jpg"
+      prompt: "A painting of single rose head with open pedals, in the style of {}"
+    

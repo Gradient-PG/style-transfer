@@ -17,6 +17,7 @@ import os
 import argparse
 import logging
 from os.path import join as ospj
+import yaml
 
 import diffusers
 import accelerate
@@ -519,6 +520,14 @@ def save(
 def get_options():
 	parser = argparse.ArgumentParser()
 	
+	# Training config to allow multiple images in one style
+	parser.add_argument(
+		"--dataset_config",
+		type=str,
+		required=True,
+		help="Path to the datasets config file",
+	)
+	
 	# DreamStyler arguments
 	parser.add_argument(
 		"--context_prompt",
@@ -574,7 +583,6 @@ def get_options():
 		"--train_image_path",
 		type=str,
 		default=None,
-		required=True,
 		help="A path of training image.",
 	)
 	parser.add_argument(
@@ -819,7 +827,7 @@ def get_options():
 		action="store_true",
 		help=(
 			"If specified save the checkpoint not in `safetensors` format,"
-			" but in original PyTorch format instead.",
+			" but in original PyTorch format instead."
 		),
 	)
 	
@@ -827,6 +835,13 @@ def get_options():
 	env_local_rank = int(os.environ.get("LOCAL_RANK", -1))
 	if env_local_rank not in (-1, args.local_rank):
 		args.local_rank = env_local_rank
+	
+	with open(args.dataset_config, "r") as file:
+		dataset = yaml.safe_load(file).get("datasets", {}).get(args.placeholder_token, None)
+	if dataset is None:
+		raise ValueError("No training data provided.")
+	
+	args.placeholder_token = f"<{args.placeholder_token}>"
 	
 	return args
 
