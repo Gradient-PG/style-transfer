@@ -22,12 +22,13 @@ setup:
 	$(python) -m pip install --upgrade pip
 	$(pip) install -r requirements.txt
 
+#  --train_image_path "./data/train/$(TOKEN).jpg" \
+#  --context_prompt "A painting of $(PROMPT) in the style of {}" \
+
 train:
 	$(python) src/models/dreamstyler/train.py \
   --num_stages 6 \
   --dataset_config "./configs/train.yml" \
-  --train_image_path "./data/train/$(TOKEN).jpg" \
-  --context_prompt "A painting of $(PROMPT) in the style of {}" \
   --placeholder_token "$(TOKEN)" \
   --output_dir "./steps/$(TOKEN)" \
   --learnable_property style \

@@ -83,9 +83,11 @@ class DreamStylerDataset(torch.utils.data.Dataset):
 		self.prompt = self.template if context_prompt is None else context_prompt
 	
 	def __getitem__(self, index):
-		image = Image.open(self.image_path).convert("RGB")
+		rand_item = torch.randint(0, len(self.image_path), (1,)).item()
+		
+		image = Image.open(self.image_path[rand_item]).convert("RGB")
 		image = np.array(image).astype(np.uint8)
-		prompt = self.prompt
+		prompt = self.prompt[rand_item]
 		
 		tokens = []
 		for t in range(self.num_stages):
@@ -856,6 +858,9 @@ def get_options():
 		dataset = yaml.safe_load(file).get("datasets", {}).get(args.placeholder_token, None)
 	if dataset is None:
 		raise ValueError("No training data provided.")
+	
+	args.train_image_path = [pair["path"] for pair in dataset]
+	args.context_prompt = [pair["prompt"] for pair in dataset]
 	
 	args.placeholder_token = f"<{args.placeholder_token}>"
 	

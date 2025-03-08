@@ -3,8 +3,8 @@
 
 datasets:
   tst7:
-    - path: "0.jpg"
-      prompt: "A painting of a bridge over a rocky river stretching across small field with trees, with a forest and a small country house in the background, in the style of {}"
-    - path: "1.jpg"
-      prompt: "A painting of single rose head with open pedals, in the style of {}"
+    - path: "./data/train/tst7/0.jpg"
+      prompt: "A painting of a bridge over a rocky river stretching across small field with trees, a forest and a small country house in the background, in the style of {}"
+    - path: "./data/train/tst7/1.jpg"
+      prompt: "A painting of single rose head on a short stem, with open pedals, from up close, in the style of {}"
     

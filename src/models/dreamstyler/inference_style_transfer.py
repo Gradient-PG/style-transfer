@@ -121,7 +121,7 @@ def style_transfer(
 		control_image = [processor(content_image, to_pil=True) for processor in processors]
 		pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 		
-		negative_prompt = "blurry, bad quality, low resolution, deformed, strabismus, ugly, poorly drawn, worst quality, low quality, normal quality"
+		negative_prompt = "bad quality, low resolution, deformed, strabismus"
 		
 		outputs = []
 		torch.manual_seed(1)
