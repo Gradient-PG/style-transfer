@@ -1,11 +1,11 @@
 # Probably will be useful for Models in the future
 
 controlnet_paths:
-  normal_bae: "lllyasviel/control_v11p_sd15_normalbae"
-  canny: "lllyasviel/control_v11p_sd15_canny"
-  softedge_hed: "lllyasviel/control_v11p_sd15_softedge"
-  depth_midas: "lllyasviel/control_v11f1p_sd15_depth"
-  lineart: "lllyasviel/control_v11p_sd15_lineart"
+  normal_bae: "lllyasviel/control_v11p_sd15_normalbae" #detail, shading
+  canny: "lllyasviel/control_v11p_sd15_canny" #edge detection
+  softedge_hed: "lllyasviel/control_v11p_sd15_softedge" #soft edge
+  depth_midas: "lllyasviel/control_v11f1p_sd15_depth"#depth maps
+  lineart_realistic: "lllyasviel/control_v11p_sd15_lineart" #line art
 
 
 style-tokens:
@@ -23,5 +23,6 @@ style-tokens:
       weights: [0.1, 0.6 ]
   tst7:
     controlnet:
-      name: [ "canny", "normal_bae" ]
-      weights: [ 1, 0.5 ]
+      name: [ "normal_bae", "lineart_realistic" ]
+      weights: [ 1 , 2.0 ]
+
