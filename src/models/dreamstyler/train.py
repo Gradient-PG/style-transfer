@@ -31,7 +31,7 @@ from PIL import Image
 from tqdm import trange
 from accelerate.logging import get_logger
 from accelerate.utils import ProjectConfiguration, set_seed
-from transformers import CLIPTextModel, CLIPTokenizer
+from transformers import CLIPTextModel, CLIPTokenizer, CLIPProcessor, CLIPModel
 from diffusers import (
 	AutoencoderKL,
 	DDPMScheduler,
@@ -40,6 +40,7 @@ from diffusers import (
 from diffusers.utils import check_min_version, is_wandb_available
 from diffusers.utils.import_utils import is_xformers_available
 from diffusers.optimization import get_scheduler
+from cleanfid import fid
 
 if is_wandb_available():
 	import wandb
