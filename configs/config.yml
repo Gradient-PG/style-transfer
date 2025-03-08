@@ -17,6 +17,10 @@ style-tokens:
     controlnet:
       name: [ "canny", "depth_midas" ]
       weights: [ 0.8, 0.3 ]
+  tst4:
+    controlnet:
+      name: [ "canny", "depth_midas"]
+      weights: [0.1, 0.6 ]
   tst7:
     controlnet:
       name: [ "canny", "normal_bae" ]
