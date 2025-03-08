@@ -276,13 +276,28 @@ def init_accelerator_and_logger(logger, opt):
 				"Make sure to install wandb if you want to use it"
 				" for logging during training."
 			)
-	
+
+	log_dir = "log_losses"
+	os.makedirs(log_dir, exist_ok=True)
+	log_file = os.path.join(log_dir, "log_loss.log")
+
 	# make one log on every process with the configuration for debugging.
 	logging.basicConfig(
 		format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
 		datefmt="%m/%d/%Y %H:%M:%S",
 		level=logging.INFO,
+		filename=log_file,
 	)
+	def log_model_details(model, logger):
+		logging.info(f"Model setup complete")
+		total_params = sum(p.numel() for p in model.parameters())
+		logging.info(f"Model has {total_params} parameters.")
+
+		# Log individual model components
+		logging.info(f"UNet parameters: {sum(p.numel() for p in model.unet.parameters())}")
+		logging.info(f"Text Encoder parameters: {sum(p.numel() for p in model.text_encoder.parameters())}")
+		logging.info(f"VAE parameters: {sum(p.numel() for p in model.vae.parameters())}")
+
 	logger.info(accelerator.state, main_process_only=False)
 	if accelerator.is_local_main_process:
 		transformers.utils.logging.set_verbosity_warning()
