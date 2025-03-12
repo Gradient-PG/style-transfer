@@ -1,0 +1,12 @@
+
+# prompt: "A painting of _, in the style of {}"
+
+datasets:
+  tst7:
+    - path: "./data/train/tst7/0.jpg"
+      prompt: "A painting of a bridge over a rocky river stretching across small field with trees, a forest and a small country house in the background, in the style of {}"
+    - path: "./data/train/tst7/1.jpg"
+      prompt: "A painting of single rose head on a short stem, with open pedals, from up close, in the style of {}"
+  tst6:
+    - path: "./data/train/tst6/tst6.jpg"
+      prompt: "A painting of a face of middle aged black man, in the style of {}"
