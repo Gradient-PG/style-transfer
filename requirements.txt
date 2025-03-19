@@ -4,7 +4,7 @@ torchaudio>=2.1.0
 diffusers==0.20.0
 transformers==4.36.0
 accelerate==0.20.3
-huggingface_hub<0.26.0
+huggingface_hub==0.25.2
 click~=8.1.8
 imageio~=2.37.0
 controlnet_aux
@@ -14,3 +14,5 @@ pillow~=11.1.0
 tqdm~=4.67.1
 PyYAML~=6.0.2
 clean-fid~=0.1.0
+
+gradio==5.21.0

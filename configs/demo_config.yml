@@ -1,0 +1,53 @@
+
+styles:
+  chinese:
+    name: "Chinese"
+    thumbnail: "1.jpg"
+  cubism:
+    name: "Cubism"
+    thumbnail: "1.png"
+  drawing:
+    name: "Drawing"
+    thumbnail: "m11.jpg"
+  geometric:
+    name: "Geometric"
+    thumbnail: "g1.jpg"
+  japanese:
+    name: "Japanese"
+    thumbnail: "1.jpg"
+  klimt:
+    name: "Klimt"
+    thumbnail: "k1.jpg"
+  minecraft:
+    name: "Minecraft"
+    thumbnail: "m2.jpg"
+  minimalistic:
+    name: "Minimalistic"
+    thumbnail: "5.jpg"
+  modernism:
+    name: "Modernism"
+    thumbnail: "08.png"
+  oil_paint:
+    name: "Oil_paint"
+    thumbnail: "03.png"
+  pastel:
+    name: "Pastel"
+    thumbnail: "1.jpg"
+  pencil:
+    name: "Pencil"
+    thumbnail: "0.jpg"
+  pink_anime:
+    name: "Pink_anime"
+    thumbnail: "a1.jpg"
+  popart:
+    name: "Popart"
+    thumbnail: "1.jpg"
+  poster:
+    name: "Poster"
+    thumbnail: "po1.jpg"
+  soft_cubism:
+    name: "Soft_cubism"
+    thumbnail: "7.jpg"
+  vangogh:
+    name: "Vangogh"
+    thumbnail: "v1.jpg"
