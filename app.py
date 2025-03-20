@@ -16,8 +16,7 @@ style_tokens = {
 }
 
 
-def save_img(img, token, prompt):
-	print(token)
+def save_img(img, token, gender, prompt, n_prompt, seed, device):
 	token = style_tokens[token]
 	img_width, img_height = img.size
 	target_width, target_height = (512, 512)
@@ -31,9 +30,12 @@ def save_img(img, token, prompt):
 	right = left + target_width
 	bottom = top + target_height
 	image = image.crop((left, top, right, bottom))
-	
-	image.save("output_path.jpg")
 
+	prompt = prompt.format(gender=gender)
+	seed = int(seed)
+	if seed == 0:
+		seed = None
+	
 	return style_transfer(
 		sd_path="runwayml/stable-diffusion-v1-5",
 		controlnet_path="lllyasviel/control_v11f1p_sd15_depth",
@@ -41,13 +43,13 @@ def save_img(img, token, prompt):
 		content_image_paths=None,
 		content_image_raw=image,
 		saveroot=None,
-		prompt="Painting of female face, in the style of {}",
+		prompt=prompt,
 		token=token,
 		num_samples=1,
 		config_path="./configs/config.yml",
 		returns=True,
-		seed=1,
-	)
+		seed=seed,
+	)[0][0]
 
 
 def update_style_preview(selected_style):
@@ -55,14 +57,15 @@ def update_style_preview(selected_style):
 
 
 with gr.Blocks() as iface:
-	gr.Markdown("# Upload Image and Add Text Overlay")
+	gr.Markdown("# Take a Picture with camera to get it in a new style")
 	
 	with gr.Row():
 		with gr.Column():
-			image_input = gr.Image(type="pil", label="Upload an Image", sources=["webcam", "upload", "clipboard"])
+			image_input = gr.Image(type="pil", label="Take a Picture", sources=["webcam", "upload", "clipboard"])
 			
 			with gr.Row(equal_height=True):
-				style_preview = gr.Image(label="Preview", interactive=False, height=170, value="data/train/geometric/g1.jpg")
+				style_preview = gr.Image(label="Preview", interactive=False, height=170,
+				                         value="data/train/geometric/g1.jpg")
 				
 				with gr.Column():
 					style_dropdown = gr.Dropdown(
@@ -73,23 +76,26 @@ with gr.Blocks() as iface:
 					gender_pick = gr.Radio(["Male face", "Female face"], label="Pick Gender", value="Female face",
 					                       interactive=True)
 			
-			submit_button = gr.Button("Add Text to Image")
+			submit_button = gr.Button("Transfer style onto the image")
 			
 			with gr.Accordion("Advanced Options", open=False):
-				gr.Markdown("Prompt")
-				gr.Markdown("Negative Prompt")
-				gr.Markdown("Seed")
-				gr.Markdown("Device")
+				prompt_input = gr.Textbox("Painting of {gender}, in the style of {{}}", label="Prompt",
+				                          interactive=True)
+				n_prompt_input = gr.Textbox("bad quality, low resolution, deformed, strabismus, cross-eyes",
+				                            label="Negative Prompt", interactive=True)
+				seed_input = gr.Number(value=0, label="Seed", interactive=True)
+				device_pick = gr.Radio(["cuda:0", "cuda:1", "mbp"], label="Select Device", value="cuda:0",
+				                       interactive=True)
 		
 		with gr.Column():
-			output_image = gr.Image(label="Resulting Image")
+			output_image = gr.Image(label="Stylized Image", format="png", interactive=False)
 	
 	submit_button.click(
 		save_img,
-		inputs=[image_input, style_dropdown, gender_pick],
+		inputs=[image_input, style_dropdown, gender_pick, prompt_input, n_prompt_input, seed_input, device_pick],
 		outputs=output_image
 	)
 	style_dropdown.change(fn=update_style_preview, inputs=style_dropdown, outputs=style_preview)
 
 if __name__ == '__main__':
-	iface.launch(server_port=7863, share=True)
+	iface.launch(server_port=7863, share=False)

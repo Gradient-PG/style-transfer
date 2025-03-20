@@ -18,9 +18,9 @@ styles:
   klimt:
     name: "Klimt"
     thumbnail: "k1.jpg"
-  minecraft:
-    name: "Minecraft"
-    thumbnail: "m2.jpg"
+#  minecraft:
+#    name: "Minecraft"
+#    thumbnail: "m2.jpg"
   minimalistic:
     name: "Minimalistic"
     thumbnail: "5.jpg"
@@ -28,16 +28,16 @@ styles:
     name: "Modernism"
     thumbnail: "08.png"
   oil_paint:
-    name: "Oil_paint"
+    name: "Oil Paint"
     thumbnail: "03.png"
   pastel:
     name: "Pastel"
-    thumbnail: "1.jpg"
+    thumbnail: "2.jpg"
   pencil:
     name: "Pencil"
     thumbnail: "0.jpg"
   pink_anime:
-    name: "Pink_anime"
+    name: "Pink Anime"
     thumbnail: "a1.jpg"
   popart:
     name: "Popart"
@@ -46,7 +46,7 @@ styles:
     name: "Poster"
     thumbnail: "po1.jpg"
   soft_cubism:
-    name: "Soft_cubism"
+    name: "Soft Cubism"
     thumbnail: "7.jpg"
   vangogh:
     name: "Vangogh"
