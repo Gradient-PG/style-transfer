@@ -2,9 +2,133 @@
 # prompt: "A painting of _, in the style of {}"
 
 datasets:
-  tst7:
-    - path: "./data/train/tst7/0.jpg"
+  chinese:
+    - path: "./data/train/chinese/1.jpg"
+      prompt: "A painting of a woman in a dress sitting, in the style of {}"
+    - path: "./data/train/chinese/2.jpg"
+      prompt: "A painting of face of a woman, in the style of {}"
+    - path: "./data/train/chinese/3.jpg"
+      prompt: "A painting of two sumo man fighting, in the style of {}"
+
+  cubism:
+    - path: "./data/train/cubism/1.png"
+      prompt: "A painting of a woman sitting writing in a notebook, in the style of {}"
+    - path: "./data/train/cubism/3.jpg"
+      prompt: "A painting of abstraction, in the style of {}"
+    - path: "./data/train/cubism/4.jpg"
+      prompt: "A painting of abstraction, round figures, in the style of {}"
+    - path: "./data/train/cubism/5.jpg"
+      prompt: "A painting of people walking, in the style of {}"
+
+  drawing:
+    - path: "./data/train/drawing/m11.jpg"
+      prompt: "A painting of a woman with glasses with her hair tied up, in the style of {}"
+    - path: "./data/train/drawing/m12.jpg"
+      prompt: "A painting of face of a woman with glasses and pencil near her lips, in the style of {}"
+  
+  geometric:
+    - path: "./data/train/geometric/g1.jpg"
+      prompt: "A painting of mountains, in the style of {}"
+    - path: "./data/train/geometric/g2.jpg"
+      prompt: "A painting of mountains and lake under and trees, in the style of {}"
+    - path: "./data/train/geometric/g4.jpg"
+      prompt: "A painting of mountains and lake under and trees, in the style of {}"
+    - path: "./data/train/geometric/g5.jpg"
+      prompt: "A painting of tree, in the style of {}"
+
+  japanese:
+    - path: "./data/train/japanese/1.jpg"
+      prompt: "A painting of lake under the mountains with a small house on the island and the bright sun, in the style of {}"
+    - path: "./data/train/japanese/j1.png"
+      prompt: "A painting of a tree, mountains and small house under the red sun, in the style of {}"
+    - path: "./data/train/japanese/j3.jpg"
+      prompt: "A painting of lake, man on a boat, mountains under red sun, in the style of {}"
+
+  klimt:
+    - path: "./data/train/klimt/k1.jpg"
+      prompt: "A painting of a woman with black hair in a gold dress, in the style of {}"
+    - path: "./data/train/klimt/k2.jpg"
+      prompt: "A painting of two people kissing in a wide long clothes, in the style of {}"
+
+  minecraft:
+    - path: "./data/train/minecraft/m2.jpg"
+      prompt: "A painting of a forest, in the style of {}"
+    - path: "./data/train/minecraft/m3.jpg"
+      prompt: "A painting of village in a forest, in the style of {}"
+    - path: "./data/train/minecraft/m4.png"
+      prompt: "A painting of a face of a man, in the style of {}"
+  pencil:
+    - path: "./data/train/pencil/0.jpg"
       prompt: "A painting of a bridge over a rocky river stretching across small field with trees, a forest and a small country house in the background, in the style of {}"
-    - path: "./data/train/tst7/1.jpg"
+    - path: "./data/train/pencil/1.jpg"
       prompt: "A painting of single rose head on a short stem, with open pedals, from up close, in the style of {}"
-    
+  poster:
+    - path: "./data/train/poster/po5.jpg"
+      prompt: "A painting of a face of middle aged black man, in the style of {}"
+    - path: "./data/train/poster/po1.jpg"
+      prompt: "A painting of a face of middle aged black man smiling with teeth, in the style of {}"
+  popart:
+    - path: "./data/train/popart/1.jpg"
+      prompt: "A painting of a face of woman, in the style of {}"
+    - path: "./data/train/popart/2.jpg"
+      prompt: "A painting of a face of girl, in the style of {}"   
+    - path: "./data/train/popart/3.jpg"
+      prompt: "A painting of a face of queen, in the style of {}"         
+  vangogh:
+    - path: "./data/train/vangogh/v1.jpg"
+      prompt: "A painting of a landscape with a tree and blue sky, in the style of {}"
+    - path: "./data/train/vangogh/v2.jpg"
+      prompt: "A painting of blue iris flowers, in the style of {}"
+    - path: "./data/train/vangogh/v3.jpg"
+      prompt: "A painting of forest, in the style of {}"
+  soft_cubism:
+    - path: "./data/train/soft_cubism/7.jpg"
+      prompt: "A painting of an office with men in suits, bold man reading, in the style of {}"
+    - path: "./data/train/soft_cubism/8.jpg"
+      prompt: "A painting of sleeping woman playing with a cat, in the style of {}"
+    - path: "./data/train/soft_cubism/10.jpg"
+      prompt: "A painting of man and woman holding a pencil, in the style of {}"
+  pink_anime:
+    - path: "./data/train/pink_anime/a1.jpg"
+      prompt: "A painting of girl drinking a soda with a straw, bold man reading, in the style of {}"
+    - path: "./data/train/pink_anime/a2.jpg"
+      prompt: "A painting of a girl drinking with a straw, in the style of {}"
+  minimalistic:
+    - path: "./data/train/minimalistic/5.jpg"
+      prompt: "A painting of woman reading a book in a bed, black cat sitting, bold man reading, in the style of {}"
+    - path: "./data/train/minimalistic/6.jpg"
+      prompt: "A painting of a portrait of a bold man with glasses, in the style of {}"  
+    - path: "./data/train/minimalistic/9.jpg"
+      prompt: "A painting of a woman sitting at the table and cat walking on the table, in the style of {}"  
+  modernism:
+    - path: "./data/train/modernism/08.png"
+      prompt: "A painting of people with umbrellas walking in a town, in the style of {}"
+    - path: "./data/train/modernism/09.png"
+      prompt: "A painting of a town with shops and church, in the style of {}"
+
+  oil_paint:
+    - path: "./data/train/oil_paint/03.png"
+      prompt: "A painting of stale nature, apples and oranges on a table,in the style of {}"
+    - path: "./data/train/oil_paint/4.jpg"       
+      prompt: "A painting of stale nature, apples, oranges, green bottle on a table, in the style of {}"
+  pastel:
+    - path: "./data/train/pastel/1.jpg"
+      prompt: "A painting of naked women sitting on a grass in a forest, in the style of {}"
+    - path: "./data/train/pastel/2.jpg"       
+      prompt: "A painting of forest, in the style of {}"
+
+  fortnite:
+    - path: "./data/train/fortnite/fort1.jpg"
+      prompt: "A painting of group of people, man with gold gun and tatoos, in the style of {}"
+    - path: "./data/train/fortnite/dort2.png"       
+      prompt: "A painting of group of people, young girl in pink hair making a heart symbol, in the style of {}"
+    - path: "./data/train/fortnite/dort3.jpg"       
+      prompt: "A painting of young man with blond hair, robot behind him, in the style of {}"
+
+  socrealizm:
+  - path: "./data/train/socrealizm/rad1.jpg"
+    prompt: "A painting of a young man, in the style of {}"
+  - path: "./data/train/socrealizm/rad3.jpg"
+    prompt: "A painting of group of people, soldier, in the style of {}"
+  - path: "./data/train/socrealizm/rad4.jpg"
+    prompt: "A painting of a soldier in red colors, in the style of {}"

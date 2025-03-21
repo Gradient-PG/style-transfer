@@ -22,8 +22,8 @@ setup:
 	$(python) -m pip install --upgrade pip
 	$(pip) install -r requirements.txt
 
-#  --train_image_path "./data/train/$(TOKEN).jpg" \
-#  --context_prompt "A painting of $(PROMPT) in the style of {}" \
+run:
+	$(python) app.py
 
 train:
 	$(python) src/models/dreamstyler/train.py \
@@ -55,7 +55,7 @@ test-style:
 	$(python) -m src.models.dreamstyler.inference_style_transfer \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
-  --content_image_path "./data/test/girls/$(CONTENT)" \
+  --content_image_path "./data/test/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
   --token "$(TOKEN)" \
   --prompt "Painting of $(PROMPT), in the style of {}" \

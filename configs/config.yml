@@ -1,28 +1,63 @@
 # Probably will be useful for Models in the future
 
 controlnet_paths:
-  normal_bae: "lllyasviel/control_v11p_sd15_normalbae" #detail, shading
-  canny: "lllyasviel/control_v11p_sd15_canny" #edge detection
-  softedge_hed: "lllyasviel/control_v11p_sd15_softedge" #soft edge
-  depth_midas: "lllyasviel/control_v11f1p_sd15_depth"#depth maps
-  lineart_realistic: "lllyasviel/control_v11p_sd15_lineart" #line art
+  normal_bae: "lllyasviel/control_v11p_sd15_normalbae"
+  canny: "lllyasviel/control_v11p_sd15_canny"
+  softedge_hed: "lllyasviel/control_v11p_sd15_softedge"
+  depth_midas: "lllyasviel/control_v11f1p_sd15_depth"
+  lineart_realistic: "lllyasviel/control_v11p_sd15_lineart"
 
 
 style-tokens:
-  tst2:
+  geometric:
     controlnet:
       name: [ "normal_bae", "canny" ]
-      weights: [ 0.1, 0.40 ]
-  tst5:
+      weights: [ 0.1, 0.5 ]
+  japanese:
+    controlnet:
+      name: [ "canny", "depth_midas" ]
+      weights: [ 0.6, 0.4]
+  chinese:
+    controlnet:
+      name: [ "softedge_hed", "depth_midas" ]
+      weights: [ 0.7, 0.5 ]
+  vangogh:
+    controlnet:
+      name: [ "canny", "depth_midas"]
+      weights: [ 0.1, 0.6 ]
+  klimt:
+    controlnet:
+      name: [ "softedge_hed", "depth_midas"]
+      weights: [ 0.1, 0.6]
+  pencil:
+    controlnet:
+      name: [ "depth_midas", "canny" ]
+      weights: [ 0.5 , 0.9 ]
+  cubism:
+    controlnet:
+      name: [ "normal_bae", "canny" ]
+      weights: [ 0.5, 0.4 ]
+  drawing:
     controlnet:
       name: [ "canny", "depth_midas" ]
       weights: [ 0.8, 0.3 ]
-  tst4:
+  poster:
+    controlnet:
+      name: [ "canny", "depth_midas" ]
+      weights: [ 0.4, 0.2 ]
+  minecraft:
+    controlnet:
+      name: [ "normal_bae", "depth_midas" ]
+      weights: [ 0.3, 0.2]
+  pastel:
     controlnet:
       name: [ "canny", "depth_midas"]
-      weights: [0.1, 0.6 ]
-  tst7:
+      weights: [ 0.4, 0.6 ]
+  modernism:
     controlnet:
-      name: [ "normal_bae", "lineart_realistic" ]
-      weights: [ 1 , 2.0 ]
-
+      name: [ "canny", "depth_midas"]
+      weights: [ 0.4, 0.6 ]
+  oil_paint:
+    controlnet:
+      name: [ "canny", "depth_midas"]
+      weights: [ 0.5, 0.6 ]

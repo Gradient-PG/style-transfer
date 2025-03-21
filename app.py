@@ -44,11 +44,13 @@ def save_img(img, token, gender, prompt, n_prompt, seed, device):
 		content_image_raw=image,
 		saveroot=None,
 		prompt=prompt,
+		nprompt=n_prompt,
 		token=token,
 		num_samples=1,
 		config_path="./configs/config.yml",
 		returns=True,
 		seed=seed,
+		device=device,
 	)[0][0]
 
 
@@ -84,7 +86,7 @@ with gr.Blocks() as iface:
 				n_prompt_input = gr.Textbox("bad quality, low resolution, deformed, strabismus, cross-eyes",
 				                            label="Negative Prompt", interactive=True)
 				seed_input = gr.Number(value=0, label="Seed", interactive=True)
-				device_pick = gr.Radio(["cuda:0", "cuda:1", "mbp"], label="Select Device", value="cuda:0",
+				device_pick = gr.Radio(["cuda:0", "cuda:1", "mps", "cpu"], label="Select Device", value="cuda:0",
 				                       interactive=True)
 		
 		with gr.Column():
@@ -98,4 +100,4 @@ with gr.Blocks() as iface:
 	style_dropdown.change(fn=update_style_preview, inputs=style_dropdown, outputs=style_preview)
 
 if __name__ == '__main__':
-	iface.launch(server_port=7863, share=False)
+	iface.launch(server_port=7863, share=True)

@@ -16,6 +16,8 @@ from .custom_pipelines import StableDiffusionControlNetPipeline
 
 import yaml
 
+os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
+
 
 def load_model(sd_path, controlnet_paths, controlnet_names, embedding_path, placeholder_token="<sks1>", num_stages=6):
 	tokenizer = CLIPTokenizer.from_pretrained(sd_path, subfolder="tokenizer")
@@ -73,6 +75,7 @@ def style_transfer(
 		content_image_raw=None,
 		saveroot="./outputs",
 		prompt="A painting of a city skyline, in the style of {}",
+		nprompt="bad quality, low resolution, deformed, strabismus, cross-eyes",
 		token="sks1",
 		num_stages=6,
 		num_samples=5,
@@ -80,6 +83,7 @@ def style_transfer(
 		config_path="config.yml",
 		returns=False,
 		seed=None,
+		device="cuda",
 ):
 	placeholder_token = f"<{token}>"
 	if content_image_paths is None:
@@ -112,8 +116,6 @@ def style_transfer(
 		num_stages,
 	)
 	
-	device = "cuda:1" if torch.cuda.is_available() else "cpu"
-	
 	pipeline.to(device)
 	generator = None if seed is None else torch.Generator(device=device).manual_seed(seed)
 	cross_attention_kwargs = {"num_stages": num_stages}
@@ -128,10 +130,9 @@ def style_transfer(
 		control_image = [processor(content_image, to_pil=True) for processor in processors]
 		pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 		
-		negative_prompt = "bad quality, low resolution, deformed, strabismus, cross-eyes"
+		negative_prompt = nprompt
 		
 		outputs = []
-		torch.manual_seed(1)
 		for _ in range(num_samples):
 			output = pipeline(
 				prompt=pos_prompt,
