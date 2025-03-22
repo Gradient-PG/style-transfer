@@ -70,6 +70,7 @@ def style_transfer(
 		controlnet_path="lllyasviel/control_v11f1p_sd15_depth",
 		embedding_path=None,
 		content_image_paths=None,
+		content_image_raw=None,
 		saveroot="./outputs",
 		prompt="A painting of a city skyline, in the style of {}",
 		token="sks1",
@@ -81,6 +82,8 @@ def style_transfer(
 		seed=None,
 ):
 	placeholder_token = f"<{token}>"
+	if content_image_paths is None:
+		content_image_paths = [content_image_raw]
 	if isinstance(content_image_paths, str):
 		content_image_paths = [content_image_paths]
 	
@@ -98,7 +101,8 @@ def style_transfer(
 		controlnet_paths.append(config.get("controlnet_paths", {}).get(name, controlnet_path))
 	weights = controlnet_configs.get("weights", [0.7])
 	
-	os.makedirs(saveroot, exist_ok=True)
+	if not returns:
+		os.makedirs(saveroot, exist_ok=True)
 	pipeline, processors = load_model(
 		sd_path,
 		controlnet_paths,
@@ -116,15 +120,18 @@ def style_transfer(
 	
 	content_outputs = []
 	for image_path in content_image_paths:
-		content_image = Image.open(image_path)
-		content_image = content_image.resize((resolution, resolution))
+		if isinstance(image_path, str):
+			content_image = Image.open(image_path)
+			content_image = content_image.resize((resolution, resolution))
+		else:
+			content_image = image_path
 		control_image = [processor(content_image, to_pil=True) for processor in processors]
 		pos_prompt = [prompt.format(f"{placeholder_token}-T{t}") for t in range(num_stages)]
 		
-		negative_prompt = "bad quality, low resolution, deformed, strabismus"
+		negative_prompt = "bad quality, low resolution, deformed, strabismus, cross-eyes"
 		
 		outputs = []
-		torch.manual_seed(1)
+		# torch.manual_seed(1)
 		for _ in range(num_samples):
 			output = pipeline(
 				prompt=pos_prompt,
@@ -180,19 +187,20 @@ def style_transfer_cli(
 		returns
 ):
 	return style_transfer(
-		sd_path,
-		controlnet_path,
-		embedding_path,
-		content_image_path,
-		saveroot,
-		prompt,
-		token,
-		num_stages,
-		num_samples,
-		resolution,
-		config_path,
-		returns,
-		seed
+		sd_path=sd_path,
+		controlnet_path=controlnet_path,
+		embedding_path=embedding_path,
+		content_image_paths=content_image_path,
+		content_image_raw=None,
+		saveroot=saveroot,
+		prompt=prompt,
+		token=token,
+		num_stages=num_stages,
+		num_samples=num_samples,
+		resolution=resolution,
+		config_path=config_path,
+		returns=returns,
+		seed=seed,
 	)
 
 

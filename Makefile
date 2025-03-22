@@ -55,7 +55,7 @@ test-style:
 	$(python) -m src.models.dreamstyler.inference_style_transfer \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
-  --content_image_path "./data/test/boys/$(CONTENT)" \
+  --content_image_path "./data/test/girls/$(CONTENT)" \
   --saveroot "./outputs/$(TOKEN)" \
   --token "$(TOKEN)" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
@@ -65,12 +65,12 @@ test-stgrid:
 	$(python) -m src.style_transfer_test_grid \
   --sd_path "runwayml/stable-diffusion-v1-5" \
   --embedding_path "./steps/$(TOKEN)/embedding/final.bin" \
-  --content_dir "./data/test/girls" \
+  --content_dir "./data/test/grid" \
   --saveroot "./outputs" \
   --token "$(TOKEN)" \
   --prompt "Painting of $(PROMPT), in the style of {}" \
   --config_path "./configs/config.yml" \
-  --num_samples 3
+  --num_samples 2
 
 remove:
 	$(RM) venv

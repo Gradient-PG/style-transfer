@@ -9,20 +9,55 @@ controlnet_paths:
 
 
 style-tokens:
-  tst2:
+  geometric:
     controlnet:
       name: [ "normal_bae", "canny" ]
       weights: [ 0.1, 0.5 ]
-  tst5:
+  japanese:
     controlnet:
       name: [ "canny", "depth_midas" ]
-      weights: [ 0.8, 0.3 ]
-  tst4:
+      weights: [ 0.6, 0.4]
+  chinese:
+    controlnet:
+      name: [ "softedge_hed", "depth_midas" ]
+      weights: [ 0.7, 0.5 ]
+  vangogh:
     controlnet:
       name: [ "canny", "depth_midas"]
       weights: [ 0.1, 0.6 ]
-  tst7:
+  klimt:
+    controlnet:
+      name: [ "softedge_hed", "depth_midas"]
+      weights: [ 0.1, 0.6]
+  pencil:
     controlnet:
       name: [ "depth_midas", "canny" ]
-      weights: [ 0.5 , 1 ]
-
+      weights: [ 0.5 , 0.9 ]
+  cubism:
+    controlnet:
+      name: [ "normal_bae", "canny" ]
+      weights: [ 0.5, 0.4 ]
+  drawing:
+    controlnet:
+      name: [ "canny", "depth_midas" ]
+      weights: [ 0.8, 0.3 ]
+  poster:
+    controlnet:
+      name: [ "canny", "depth_midas" ]
+      weights: [ 0.4, 0.2 ]
+  minecraft:
+    controlnet:
+      name: [ "normal_bae", "depth_midas" ]
+      weights: [ 0.3, 0.2]
+  pastel:
+    controlnet:
+      name: [ "canny", "depth_midas"]
+      weights: [ 0.4, 0.6 ]
+  modernism:
+    controlnet:
+      name: [ "canny", "depth_midas"]
+      weights: [ 0.4, 0.6 ]
+  oil_paint:
+    controlnet:
+      name: [ "canny", "depth_midas"]
+      weights: [ 0.5, 0.6 ]
