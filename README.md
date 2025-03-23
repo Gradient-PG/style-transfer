@@ -1,6 +1,6 @@
 # Style Transfer with Stable Diffusion 
 
-This repository highly uses code form [Dream Styler](https://nmhkahn.github.io/dreamstyler/) please visit their website and read their paper to get to know more about model design.
+This repository uses code from [Dream Styler](https://nmhkahn.github.io/dreamstyler/) please visit their website and read their paper to get to know more about model design.
 
 ## Running the app
 
